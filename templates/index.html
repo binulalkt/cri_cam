@@ -1,0 +1,154 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caricature Generator</title>
+</head>
+<body>
+    <h1>AI Caricature Generator</h1>
+
+    <label for="styleImageUrl">Style Image URL (optional):</label>
+    <input type="text" id="styleImageUrl" placeholder="Enter style image URL" />
+    <br><br>
+    
+    <video id="webcam" autoplay playsinline width="320" height="240"></video>
+    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+    <br>
+    <button id="capture">Capture Image</button>
+    <button id="generate">Generate Caricature</button>
+    <br><br>
+    <img id="capturedImage" src="" alt="Captured Image" width="320" height="240">
+    <p id="status"></p>
+
+    <script>
+        const webcamElement = document.getElementById('webcam');
+        const canvasElement = document.getElementById('canvas');
+        const capturedImageElement = document.getElementById('capturedImage');
+        const captureButton = document.getElementById('capture');
+        const generateButton = document.getElementById('generate');
+        const statusElement = document.getElementById('status');
+        const styleImageUrlElement = document.getElementById('styleImageUrl'); // Get the style image URL input element
+
+        const constraints = {
+            video: true
+        };
+
+        // Start webcam stream
+        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+            webcamElement.srcObject = stream;
+        });
+
+        // Capture the image from the webcam
+        captureButton.addEventListener('click', () => {
+            const context = canvasElement.getContext('2d');
+            context.drawImage(webcamElement, 0, 0, canvasElement.width, canvasElement.height);
+            const imageDataURL = canvasElement.toDataURL('image/jpeg');
+            capturedImageElement.src = imageDataURL; // Display captured image
+        });
+
+        // Send the captured image to the server
+        let pollingInterval; // Variable to store the polling interval
+
+        // Function to start polling for order status
+        function startPolling(orderId) {
+            // Clear any existing interval to prevent multiple polls
+            clearInterval(pollingInterval);
+
+                fetch(`/check_status/${orderId}`)
+                    .then(response => response.json())
+                    .then(statusData => {
+                        if (statusData.status === 'active') {
+                            clearInterval(pollingInterval); // Stop polling
+                            statusElement.textContent = `Caricature ready! Output URL: ${statusData.output}`;
+                            // You can also display the output image if you want
+                            // capturedImageElement.src = statusData.output;
+                        } else if (statusData.status === 'failed') {
+                            clearInterval(pollingInterval); // Stop polling
+                            statusElement.textContent = `Error: ${statusData.message}`;
+                        }
+                    })
+                    .catch(err => {
+                        statusElement.textContent = `Error checking status: ${err}`;
+                    });
+            }
+        // Function to convert base64 image data to a Blob
+        function dataURLToBlob(dataURL) {
+            const parts = dataURL.split(',');
+            const mimeType = parts[0].match(/:(.*?);/)[1];
+            const byteString = atob(parts[1]);
+            const arrayBuffer = new ArrayBuffer(byteString.length);
+            const uint8Array = new Uint8Array(arrayBuffer);
+
+            for (let i = 0; i < byteString.length; i++) {
+                uint8Array[i] = byteString.charCodeAt(i);
+            }
+
+            return new Blob([uint8Array], { type: mimeType });
+        }
+
+        // Send the captured image to the server
+     // Send the captured image to the server
+generateButton.addEventListener('click', () => {
+    const imageDataURL = capturedImageElement.src;
+
+    if (!imageDataURL) {
+        statusElement.textContent = 'Please capture an image first!';
+        return;
+    }
+
+    // Convert base64 data to a Blob
+    const blob = dataURLToBlob(imageDataURL);
+
+    // Construct the form data manually
+    const formData = new FormData();
+    formData.append('imageFile', blob, 'captured_image.jpg');
+
+    fetch('/upload_image', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const imageUrl = data.imageUrl;  // Get the uploaded image URL from the server
+            generateCaricature(imageUrl);    // Pass the image URL to generate caricature
+        } else {
+            statusElement.textContent = `Error: ${data.message}`;
+        }
+    })
+    .catch(err => {
+        statusElement.textContent = `Error: ${err}`;
+    });
+});
+
+// Function to generate caricature using image URL
+function generateCaricature(imageUrl) {
+    const styleImageUrl = styleImageUrlElement.value.trim();
+    const formData = new FormData();
+    formData.append('imageUrl', imageUrl);
+
+    if (styleImageUrl) {
+        formData.append('styleImageUrl', styleImageUrl);  // Optional style image URL
+    }
+
+    fetch('/generate_caricature', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'processing') {
+            statusElement.textContent = `Processing... Order ID: ${data.orderId}`;
+            startPolling(data.orderId);  // Start polling for status updates
+        } else {
+            statusElement.textContent = `Error: ${data.message}`;
+        }
+    })
+    .catch(err => {
+        statusElement.textContent = `Error: ${err}`;
+    });
+}
+
+    </script>
+</body>
+</html>
