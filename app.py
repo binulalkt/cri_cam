@@ -35,7 +35,7 @@ def add_template(generated_image_url):
     response = requests.get(generated_image_url)
     image = Image.open(BytesIO(response.content))
 
-    template = Image.open("template.png")
+    template = Image.open("static/template.png")
 
     position = (90, 200)
     template.paste(image, position)
