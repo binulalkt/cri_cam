@@ -16,7 +16,7 @@ CORS(app)
 UPLOAD_FOLDER = './uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-API_KEY = 'deb4ccc8eb7b495c92f0df2de0e31fbe_7228435de6e24da8b0c4ec0d175c7f21_andoraitools'
+API_KEY = 'caa0b8d6a0214bc4920440ca3cb2208c_24c08772f3b842619956e62c7b6757a6_andoraitools'
 GENERATION_URL = 'https://api.lightxeditor.com/external/api/v1/caricature'
 STATUS_URL = 'https://api.lightxeditor.com/external/api/v1/order-status'
 
@@ -70,10 +70,8 @@ def upload_pillow_image_to_freeimagehost(image):
 def generate_caricature():
     try:
         image_url = request.form.get('imageUrl')
-        style_image_url = request.form.get('styleImageUrl')
-
         logging.info(
-            f"Received request to generate caricature with imageUrl: {image_url}, styleImageUrl: {style_image_url}")
+            f"Received request to generate caricature with imageUrl: {image_url}")
 
         if not image_url:
             logging.error("No image URL provided")
@@ -81,11 +79,9 @@ def generate_caricature():
 
         payload = {
             "imageUrl": image_url,
-            "textPrompt": "Generate a vibrant caricature with watercolours , clear and bright face,dont show any text or tesxt like abstracts  "
+            "styleImageUrl": "https://i.ibb.co/0mRQ6fP/Coca-Cola-Caricature-Booth.jpg",
+            "textPrompt": "You are a perfect digital photo caricapture. Generate a vibrant watercolor caricapture of the person. The face should be clear, bright, and exaggerated, with bold, expressive features of input photo. Surround the caricature with soft and playful color splashes in the background, keeping the overall tone light and joyful. Ensure there are no text elements or abstract designs in the image. Use the dressing and face expression same as the original photo"
         }
-
-        if style_image_url:
-            payload['styleImageUrl'] = style_image_url
 
         headers = {
             'x-api-key': API_KEY,
