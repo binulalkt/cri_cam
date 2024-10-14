@@ -351,12 +351,12 @@
         }
 
         function startPolling(orderId) {
-            const pollingInterval = setInterval(() => {
+
                 fetch(`/check_status/${orderId}`)
                     .then(response => response.json())
                     .then(statusData => {
                         if (statusData.status === 'active') {
-                            clearInterval(pollingInterval);
+                            
                             const resultUrl = statusData.output;
                             statusElement.textContent = 'Caricature ready!';
 
@@ -402,7 +402,7 @@
                             overlay.style.display = 'none'; // Hide overlay
                             newCaricatureButton.classList.remove('hidden'); // Show New Caricature button
 
-                            // Auto refresh after 10 seconds
+                            // Auto refresh after 30 seconds
                             setTimeout(() => {
                                 location.reload();
                             }, 50000);
@@ -411,15 +411,15 @@
                         }
                     })
                     .catch(err => {
-                        clearInterval(pollingInterval);
+                        // clearInterval(pollingInterval);
                         statusElement.textContent = `Error: ${err}. Contact Photobooth authority.`;
                         loadingElement.style.display = 'none'; // Hide loading animation
                         overlay.style.display = 'none'; // Hide overlay
                     });
-            }, 5000);
-        }
+   
+                }
 
-        // New Caricature button event
+
         newCaricatureButton.addEventListener('click', () => {
             location.reload(); // Refresh the page
         });
