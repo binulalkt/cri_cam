@@ -16,7 +16,7 @@ CORS(app)
 UPLOAD_FOLDER = './uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-API_KEY = '6fdcf57141e74abd9583e09ff7f9b7f5_67812ca7faf14eb8ab10feda00451a80_andoraitools'
+API_KEY = 'deb4ccc8eb7b495c92f0df2de0e31fbe_7228435de6e24da8b0c4ec0d175c7f21_andoraitools'
 GENERATION_URL = 'https://api.lightxeditor.com/external/api/v1/caricature'
 STATUS_URL = 'https://api.lightxeditor.com/external/api/v1/order-status'
 
@@ -37,9 +37,7 @@ def add_template(generated_image_url):
 
     template = Image.open("template.png")
 
-    image = image.resize((1000, 1000))
-
-    position = (100, 200)
+    position = (90, 200)
     template.paste(image, position)
     return template
 
@@ -231,5 +229,5 @@ def upload_image():
 
 if __name__ == '__main__':
     logging.info("Starting Flask server")
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True, port=5001)
 
