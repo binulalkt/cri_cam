@@ -1,11 +1,12 @@
-import requests
-import json
+import logging
 import os
 import time
-import logging
+from io import BytesIO
+
+import requests
+from PIL import Image
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from werkzeug.utils import secure_filename
 
 # Set up logging to print to the terminal
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -15,7 +16,7 @@ CORS(app)
 UPLOAD_FOLDER = './uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-API_KEY = '15adc73ab0314db9a39b13b5362af82f_55fac8e475874662b24b060a71fe9e33_andoraitools'
+API_KEY = '6fdcf57141e74abd9583e09ff7f9b7f5_67812ca7faf14eb8ab10feda00451a80_andoraitools'
 GENERATION_URL = 'https://api.lightxeditor.com/external/api/v1/caricature'
 STATUS_URL = 'https://api.lightxeditor.com/external/api/v1/order-status'
 
@@ -23,10 +24,49 @@ STATUS_URL = 'https://api.lightxeditor.com/external/api/v1/order-status'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
+
 @app.route('/')
 def index():
     logging.info("Rendering index page")
     return render_template('index.html')
+
+
+def add_template(generated_image_url):
+    response = requests.get(generated_image_url)
+    image = Image.open(BytesIO(response.content))
+
+    template = Image.open("template.png")
+
+    image = image.resize((1000, 1000))
+
+    position = (100, 200)
+    template.paste(image, position)
+    return template
+
+
+def upload_pillow_image_to_freeimagehost(image):
+    url = "https://freeimage.host/api/1/upload"
+    payload = {
+        "key": "6d207e02198a847aa98d0a2a901485a5",  # ADD YOUR API KEY HERE
+        "action": "upload"
+    }
+
+    image_byte_array = BytesIO()
+    image.save(image_byte_array, format="PNG")
+    image_byte_array.seek(0)
+
+    files = {
+        "source": ("image.png", image_byte_array, "image/png"),
+    }
+
+    response = requests.post(url, data=payload, files=files)
+
+    if response.status_code == 200:
+        result = response.json()
+        return result["image"]["url"]
+    else:
+        raise Exception(f"Failed to upload image: {response.text}")
+
 
 @app.route('/generate_caricature', methods=['POST'])
 def generate_caricature():
@@ -34,7 +74,8 @@ def generate_caricature():
         image_url = request.form.get('imageUrl')
         style_image_url = request.form.get('styleImageUrl')
 
-        logging.info(f"Received request to generate caricature with imageUrl: {image_url}, styleImageUrl: {style_image_url}")
+        logging.info(
+            f"Received request to generate caricature with imageUrl: {image_url}, styleImageUrl: {style_image_url}")
 
         if not image_url:
             logging.error("No image URL provided")
@@ -42,7 +83,7 @@ def generate_caricature():
 
         payload = {
             "imageUrl": image_url,
-            "textPrompt": "Generate caricature"
+            "textPrompt": "Generate a vibrant caricature with watercolours , clear and bright face,dont show any text or tesxt like abstracts  "
         }
 
         if style_image_url:
@@ -72,11 +113,13 @@ def generate_caricature():
                 return jsonify({'status': 'error', 'message': 'orderId missing in API response'}), 500
         else:
             logging.error(f"Unexpected API Response: {response.text}")
-            return jsonify({'status': 'error', 'message': f"Unexpected API Response: {response.text}"}), response.status_code
+            return jsonify(
+                {'status': 'error', 'message': f"Unexpected API Response: {response.text}"}), response.status_code
 
     except Exception as e:
         logging.error(f"Error: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 @app.route('/check_status/<order_id>', methods=['GET'])
 def check_status(order_id):
@@ -95,10 +138,11 @@ def check_status(order_id):
     }
 
     retries = 0
-    
+
     while retries < max_retries:
         try:
-            logging.info(f"Sending POST request to check status for orderId: {order_id} (Retry {retries + 1}/{max_retries})")
+            logging.info(
+                f"Sending POST request to check status for orderId: {order_id} (Retry {retries + 1}/{max_retries})")
 
             response = requests.post(url, headers=headers, json=payload)
             # print(response.status_code)
@@ -108,14 +152,17 @@ def check_status(order_id):
             if response.status_code == 200:
                 response_json = response.json()
                 print(response_json)
-                body_data=response_json.get('body')
+                body_data = response_json.get('body')
                 status = body_data.get('status')
 
                 # logging.info(f"Status received: {status}")
 
                 if status == 'active':
                     # logging.info(f"Order {order_id} is active. Returning output.")
-                    return jsonify({'status': 'active', 'output': body_data.get('output')})
+                    image_url = body_data.get('output')
+                    template_image = add_template(image_url)
+                    image_url = upload_pillow_image_to_freeimagehost(template_image)
+                    return jsonify({'status': 'active', 'output': image_url})
                 elif status == 'failed':
                     # logging.error(f"Order {order_id} failed.")
                     return jsonify({'status': 'failed', 'message': 'Order processing failed.'}), 400
@@ -124,8 +171,10 @@ def check_status(order_id):
                 time.sleep(retry_interval)
                 retries += 1
             else:
-                logging.error(f"Failed to retrieve order status. Status code: {response.status_code}, Response: {response.text}")
-                return jsonify({'status': 'error', 'message': f'Failed to retrieve order status. Status code: {response.status_code}'}), response.status_code
+                logging.error(
+                    f"Failed to retrieve order status. Status code: {response.status_code}, Response: {response.text}")
+                return jsonify({'status': 'error',
+                                'message': f'Failed to retrieve order status. Status code: {response.status_code}'}), response.status_code
 
         except Exception as e:
             logging.error(f"Error: {e}")
@@ -133,6 +182,7 @@ def check_status(order_id):
 
     logging.error(f"Max retries exceeded for orderId: {order_id}")
     return jsonify({'status': 'error', 'message': 'Max retries exceeded, unable to retrieve active status.'}), 408
+
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
@@ -147,14 +197,33 @@ def upload_image():
             logging.error("No selected image file")
             return jsonify({'status': 'error', 'message': 'No selected image file'}), 400
 
-        filename = secure_filename(image_file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        image_file.save(file_path)
+        # Use ImgBB API to upload the image
+        api_url = 'https://api.imgbb.com/1/upload'
+        api_key = '4271c9081a75f3f81b7cbc8d39163a3b'  # Your ImgBB API key
 
-        image_url = f'{request.host_url}uploads/{filename}'
-        logging.info(f"Image uploaded successfully: {image_url}")
-        
-        return jsonify({'status': 'success', 'imageUrl': image_url})
+        files = {
+            'image': image_file,
+        }
+        data = {
+            'key': api_key,
+        }
+
+        logging.info(f"Uploading image to ImgBB API")
+
+        response = requests.post(api_url, data=data, files=files)
+
+        if response.status_code == 200:
+            response_data = response.json()
+            if response_data.get('success'):
+                image_url = response_data['data']['url']
+                logging.info(f"Image uploaded successfully: {image_url}")
+                return jsonify({'status': 'success', 'imageUrl': image_url})
+            else:
+                logging.error(f"Error from ImgBB: {response_data}")
+                return jsonify({'status': 'error', 'message': 'Error uploading image to ImgBB'}), 500
+        else:
+            logging.error(f"Failed to upload image. Status code: {response.status_code}, Response: {response.text}")
+            return jsonify({'status': 'error', 'message': 'Failed to upload image to ImgBB'}), 500
 
     except Exception as e:
         logging.error(f"Error: {e}")
@@ -162,4 +231,5 @@ def upload_image():
 
 if __name__ == '__main__':
     logging.info("Starting Flask server")
-    app.run(debug=False,host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
+

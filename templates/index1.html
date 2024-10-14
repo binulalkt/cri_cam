@@ -6,16 +6,17 @@
     <title>Caricature Photobooth</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-            background-image: url('/static/bg.jpg'); /* Add your background image URL */       
+        body {            background-image: url('/static/bg2.jpg'); /* Add your background image URL */
+            
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             color: #333;
             height: 100%;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+
             overflow: hidden;
         }
 
@@ -27,6 +28,7 @@
             flex-direction: column;
             align-items: center;
             position: relative; /* Added for positioning the overlay */
+            
         }
 
         h1 {
@@ -73,9 +75,11 @@
             height: 100px;
             background-color: #ffffff00;
         }
+
         .side-img {
             width: 100px;
             height: 100px;
+            
         }
 
         #qrcode {
@@ -94,7 +98,7 @@
 
         #capturedImage, #generatedCaricature, video {
             width: 720px;
-            height: 640px;
+            height: 60px;
             object-fit: contain;
             display: none;
             background-color: #ffffff00;
@@ -145,45 +149,41 @@
 </head>
 
 <body>
-    <style>
-        .container {
-            display: none;
-        }
-    </style>
+    <img src="https://onewiibe.com/wp-content/uploads/2024/09/update-one-wiibe-logo-white.png" style="width:auto; height: 13%; display: block; margin: 0 auto;" alt="Caricature Photo Maker Online">
     
-    <script>
-        document.addEventListener('mousemove', function() {
-            document.querySelector('.container').style.display = 'block';
-        });
-    </script>
-
-    <img src="https://onewiibe.com/wp-content/uploads/2024/09/update-one-wiibe-logo-white.png" style="width:auto; height: 15%; display: block; margin: 0 auto;" alt="Caricature Photo Maker Online">
-    
-    <div class="container">
+    <div class="container" style="border-radius: 20px;">
         <input type="hidden" id="styleImageUrl" value="1"/>
         
         <div class="main-display">
             <div class="side-container">
-                <img src="https://onewiibe.com/wp-content/uploads/2024/09/update-one-wiibe-logo-white.png" class="side-img" alt="Left Image" id="side-img-left">
+                <img src=" " class="side-img"  id="side-img-left">
                 <div id="qrcode"></div> <!-- QR code will be placed here -->
             </div>
             <video id="webcam" autoplay playsinline class="active" style="width: 720px; height: 640px;"></video>
             <img id="capturedImage" src="" alt="Captured Image" />
             <img id="generatedCaricature" src="" alt="Generated Caricature" />
-            <img src="https://onewiibe.com/wp-content/uploads/2024/09/update-one-wiibe-logo-white.png" class="side-img" alt="Right Image" id="side-img-right">
+            <img src=" " class="side-img"  id="side-img-right">
         </div>
 
-        <canvas id="canvas" width="700" height="600"></canvas>
+        <canvas id="canvas" width="720" height="640"></canvas>
 
         <div style="display: flex; justify-content: center; align-items: center;">
             <button id="capture">Capture</button>
-            <button id="generate" style="background-color: #28a745; color: #fff; border: none; border-radius: 4px; padding: 10px 20px; cursor: pointer; margin-left: 10px;" disabled>Generate Caricature</button>
+            <button id="generate" style="background-color: rgba(40, 167, 69, 0.5); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; cursor: pointer; margin-left: 10px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); transition: all 0.3s ease-in-out;" disabled>Generate Caricature</button>
+            <style>
+                #generate:hover {
+                    background-color: rgba(40, 167, 69, 0.7);
+                }
+                #generate:active {
+                    background-color: rgba(40, 167, 69, 1);
+                }
+            </style>
             <button id="newCaricature" class="hidden" style="background-color: #007bff; color: #fff; border: none; border-radius: 4px; padding: 10px 20px; cursor: pointer; margin-left: 10px;">New Caricature</button>
         </div>
 
         <div id="loading">
             <p>Generating caricature... please wait</p>
-            <img src="/static/loading.gif" alt="Loading" style="width: 50px; height: 50px;">
+            <img src="/static/loading.gif" alt="Loading" style="height: 50px; width: 50px">
         </div>
 
         <p id="status"></p>
@@ -192,12 +192,12 @@
         <div id="overlay">
             <div>
                 <p class="countdown" id="countdownDisplay">5</p>
-                <img src="/static/loading.gif" alt="Loading" style="width: 50px; height: 50px;">
+                <img src="/static/loading.gif" alt="Loading" style="height: 50px; width: 50px">
             </div>
         </div>
     </div>
 
-    <script>
+       <script>
         const webcamElement = document.getElementById('webcam');
         const canvasElement = document.getElementById('canvas');
         const capturedImageElement = document.getElementById('capturedImage');
@@ -231,26 +231,12 @@
                 if (countdown <= 0) {
                     clearInterval(interval);
                     callback();
-                    // Flash screen as full white
-                    const flash = document.createElement('div');
-                    flash.style.position = 'fixed';
-                    flash.style.top = '0';
-                    flash.style.right = '0';
-                    flash.style.bottom = '0';
-                    flash.style.left = '0';
-                    flash.style.backgroundColor = 'white';
-                    document.body.appendChild(flash);
-                    setTimeout(() => {
-                        document.body.removeChild(flash);
-                    }, 1000);
                 }
             }, 1000);
         }
 
         captureButton.addEventListener('click', () => {
             overlay.style.display = 'flex'; // Show overlay
-            capturedImageElement.classList.remove('active');
-            webcamElement.classList.add('active');
             startCountdown(5, () => {
                 const context = canvasElement.getContext('2d');
                 context.drawImage(webcamElement, 0, 0, canvasElement.width, canvasElement.height);
@@ -296,7 +282,6 @@
             const formData = new FormData();
             formData.append('imageFile', blob, 'captured_image.jpg');
 
-            countdownDisplay.style.display = 'none';
             loadingElement.style.display = 'block'; // Show loading animation
             generateButton.classList.add('hidden'); // Hide generate button
             overlay.style.display = 'flex'; // Show overlay
@@ -360,12 +345,8 @@
                             const resultUrl = statusData.output;
                             statusElement.textContent = 'Caricature ready!';
 
-                            // Hide captured image and show generated caricature
                             capturedImageElement.classList.remove('active');
-                            // Set the src attribute of the generated caricature element to the result URL
-                            const generatedCaricatureImg = document.getElementById('generatedCaricature');
-                            generatedCaricatureImg.src = resultUrl;
-                            // Show the generated caricature element
+                            generatedCaricatureElement.src = resultUrl;
                             generatedCaricatureElement.classList.add('active');
 
                             qrCodeContainer.innerHTML = '';
@@ -379,25 +360,11 @@
                             sideImgLeft.style.display = 'none';  // Hide left side image
 
                             // Auto-download caricature image
-                            fetch(resultUrl)
-                                .then(response => response.blob())
-                                .then(blob => {
-                                    // Create an URL pointing to the blob, which allows the browser to download it
-                                    // This is necessary because the blob is not a file on the server, but rather a
-                                    // temporary object in memory that can be accessed via this URL
-                                    const url = window.URL.createObjectURL(blob);
-                                    // const link = document.createElement('a');
-                                    // link.href = url;
-                                    link.download = `cartoons/caricature_${orderId}.jpg`;
-                                    link.click();
-                                    window.URL.revokeObjectURL(url);
+                            const link = document.createElement('a');
+                            link.href = resultUrl;
+                            link.download = `cartoons/caricature_${orderId}.jpg`;
+                            link.click();
 
-                                    const image = document.createElement('img');
-                                    image.src = url;
-                                    image.alt = `Generated Caricature for order ID ${orderId}`;
-                                    generatedCaricatureElement.innerHTML = '';
-                                    generatedCaricatureElement.appendChild(image);
-                                });
                             loadingElement.style.display = 'none'; // Hide loading animation
                             overlay.style.display = 'none'; // Hide overlay
                             newCaricatureButton.classList.remove('hidden'); // Show New Caricature button
@@ -405,7 +372,7 @@
                             // Auto refresh after 10 seconds
                             setTimeout(() => {
                                 location.reload();
-                            }, 50000);
+                            }, 30000);
                         } else {
                             statusElement.textContent = 'Still processing...';
                         }

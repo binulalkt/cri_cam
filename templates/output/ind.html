@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Blending with Overlay and Download</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #preview-canvas {
+            border: 2px solid black;
+            margin-top: 20px;
+        }
+        #upload-btn, #download-btn {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Upload Image and Apply Blend with Overlay</h1>
+
+    <input type="file" id="upload-btn" accept="image/*">
+    <br>
+    <button id="download-btn" style="display:none;">Download Processed Image</button>
+    <br>
+    <canvas id="preview-canvas" width="500" height="500"></canvas>
+
+    <script>
+        const uploadBtn = document.getElementById('upload-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const previewCanvas = document.getElementById('preview-canvas');
+        const previewCtx = previewCanvas.getContext('2d');
+    
+        // Load black.png and frame.png
+        const blackImage = new Image();
+        const frameImage = new Image();
+        blackImage.src = 'black.png'; // Make sure black.png is in the same directory
+        frameImage.src = 'frame.png'; // Make sure frame.png is in the same directory
+    
+        // Variables to store frame dimensions and the uploaded image
+        let frameWidth, frameHeight;
+        let uploadedImage = null; // This will store the uploaded image
+    
+        // Once frame.png is loaded, get its dimensions
+        frameImage.onload = function() {
+            frameWidth = frameImage.width;
+            frameHeight = frameImage.height;
+        };
+    
+        // When the user uploads an image
+        uploadBtn.addEventListener('change', function(event) {
+            uploadedImage = new Image(); // Create a new Image object
+            const file = event.target.files[0];
+            const reader = new FileReader();
+    
+            reader.onload = function(e) {
+                uploadedImage.src = e.target.result;
+            };
+    
+            reader.readAsDataURL(file);
+    
+            // Once the uploaded image is loaded
+            uploadedImage.onload = function() {
+                // Clear the preview canvas
+                previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    
+                // Draw black.png on the preview canvas
+                previewCtx.drawImage(blackImage, 0, 0, previewCanvas.width, previewCanvas.height);
+    
+                // Blend the uploaded image on the preview canvas
+                previewCtx.globalAlpha = 0.5; // Adjust blending level if needed
+                previewCtx.drawImage(uploadedImage, 0, 0, previewCanvas.width, previewCanvas.height);
+    
+                // Reset alpha and draw frame.png as overlay
+                previewCtx.globalAlpha = 1.0;
+                previewCtx.drawImage(frameImage, 0, 0, previewCanvas.width, previewCanvas.height);
+    
+                // Show the download button after processing
+                downloadBtn.style.display = 'inline';
+            };
+        });
+    
+        // Download the processed image at the size of frame.png
+        downloadBtn.addEventListener('click', function() {
+            if (!uploadedImage) {
+                alert('Please upload an image first!');
+                return;
+            }
+    
+            // Create a new canvas for the full-size image
+            const fullSizeCanvas = document.createElement('canvas');
+            fullSizeCanvas.width = frameWidth;
+            fullSizeCanvas.height = frameHeight;
+            const fullSizeCtx = fullSizeCanvas.getContext('2d');
+    
+            // Draw black.png on the full-size canvas
+            fullSizeCtx.drawImage(blackImage, 0, 0, frameWidth, frameHeight);
+    
+            // Blend the uploaded image on the full-size canvas
+            fullSizeCtx.globalAlpha = 0.5; // Same blending level
+            fullSizeCtx.drawImage(uploadedImage, 0, 0, frameWidth, frameHeight);
+    
+            // Reset alpha and draw frame.png as overlay
+            fullSizeCtx.globalAlpha = 1.0;
+            fullSizeCtx.drawImage(frameImage, 0, 0, frameWidth, frameHeight);
+    
+            // Create a data URL from the full-size canvas
+            const dataURL = fullSizeCanvas.toDataURL('image/png');
+    
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'processed-image.png'; // Name of the file to be downloaded
+    
+            // Simulate a click on the link to trigger the download
+            link.click();
+        });
+    </script>
+    
+
+</body>
+</html>
