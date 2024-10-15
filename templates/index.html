@@ -11,7 +11,7 @@
             font-family: sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20240102/pngtree-dynamic-blend-vibrant-gradient-of-purple-and-pink-with-overlapping-dark-image_13891622.png');
+            background-image: url('static/bg3.jpg');
             /* Add your background image URL */
             background-size: cover;
             background-position: center;
@@ -82,8 +82,8 @@
         #capturedImage,
         #generatedCaricature,
         video {
-            width: 720px;
-            height: 640px;
+            width: 1080px;
+            height: 1920px;
             object-fit: contain;
             display: none;
             background-color: #ffffff3e;
@@ -162,11 +162,9 @@
 
     <img src="https://onewiibe.com/wp-content/uploads/2024/09/update-one-wiibe-logo-white.png"
         style="width:auto; height: 15%; display: block; margin: 0 auto;" alt="Caricature Photo Maker Online">
-
     <div class="container">
         <input type="hidden" id="styleImageUrl" value="1" />
-
-        <div class="main-display" style="padding-top: 15%;">
+        <div class="main-display" style="padding-top: 15%; border: 1px solid #ccc; border-radius: 16px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);">
             <div class="side-container" id="side-container">
                 <div id="qrcode"></div> <!-- QR code will be placed here -->
             </div>
@@ -245,6 +243,7 @@
         newCaricatureButton.style.display = 'none';
         generateButton.style.display = 'none';
         let isGeneratedOnce = false;
+        let change_button=false;
         // function showQrCodeInNewWindow() {}
         const constraints = {
             video: true
@@ -368,6 +367,9 @@
                     if (data.status === 'success') {
                         const imageUrl = data.imageUrl;
                         generateCaricature(imageUrl);
+                        generateButton.textContent = 'New Caricature';
+                        change_button=true;
+                        
                     } else {
                         statusElement.textContent = `Error: ${data.message}. Contact Photobooth authority.`;
                         loadingElement.style.display = 'none'; // Hide loading animation
@@ -561,7 +563,10 @@
 
 
         newCaricatureButton.addEventListener('click', () => {
-            location.reload(); // Refresh the page
+
+            if (event.target.id === 'change_button') {
+                location.reload(); // Refresh the page
+            }
         });
 
     </script>
