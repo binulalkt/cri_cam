@@ -565,7 +565,7 @@
 
         generateButton.addEventListener('click', () => {
 
-            if (event.target.id === 'change_button') {
+            if (change_button) { 
                 location.reload(); // Refresh the page
                 change_button=false;
             }
