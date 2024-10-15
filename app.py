@@ -80,7 +80,7 @@ def generate_caricature():
         payload = {
             "imageUrl": image_url,
             "styleImageUrl": "https://i.ibb.co/0mRQ6fP/Coca-Cola-Caricature-Booth.jpg",
-            "textPrompt": "You are a perfect digital photo caricapture. Generate a vibrant watercolor caricapture of the person. The face should be clear, bright, and exaggerated, with bold, expressive features of input photo. Surround the caricature with soft and playful color splashes in the background, keeping the overall tone light and joyful. Ensure there are no text elements or abstract designs in the image. Use the dressing and face expression same as the original photo"        }
+            "textPrompt": "Generate a vibrant watercolor caricature of the person in the provided photo. The face should be clear, bright, and exaggerated with bold, expressive features. It is mandatory to retain the original dressing and facial expression exactly as in the photo, without any alterations. High detailing is crucial to capture the essence and personality of the individual. The background should feature soft and playful watercolor splashes, maintaining a light and joyful tone. Avoid including any text elements or abstract designs to keep the focus entirely on the caricature."        }
 
         headers = {
             'x-api-key': API_KEY,
