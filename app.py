@@ -80,7 +80,7 @@ def generate_caricature():
         payload = {
             "imageUrl": image_url,
             "styleImageUrl": "https://i.ibb.co/0mRQ6fP/Coca-Cola-Caricature-Booth.jpg",
-            "textPrompt": "Generate a artistic portrait with their original outfit. The person is posed confidently with a friendly and approachable expression , The background features a dynamic, abstract swirl of purples, blues, and whites, resembling a watercolour effect. This gives the image a modern, creative feel. The overall style is a blend of digital art and realism, with a focus on bold colours and smooth textures. Ensure there are no text elements or abstract designs in the image. Use the dressing and facial expression same as in the original photo"
+            "textPrompt": "You are a perfect digital photo caricapture. Generate a vibrant watercolor caricapture of the person. The face should be clear, bright, and exaggerated, with bold, expressive features of input photo. Surround the caricature with soft and playful color splashes in the background, keeping the overall tone light and joyful.The background features a dynamic, abstract swirl of purples, blues, and whites, resembling a watercolour or smoke-like effect. This gives the image a modern, creative feel. The overall style is a blend of digital art and realism, with a focus on bold colours and smooth textures. Ensure there are no text elements or abstract designs in the image.  Ensure there are no text elements or abstract designs in the image. Use the dressing and face expression same as the original photo"
         }
 
         headers = {
