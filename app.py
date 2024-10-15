@@ -80,7 +80,7 @@ def generate_caricature():
         payload = {
             "imageUrl": image_url,
             "styleImageUrl": "https://i.ibb.co/GV3P1T1/Whats-App-Image-2024-10-14-at-13-17-53.jpg",
-            "textPrompt": "Generate a vibrant watercolor caricature of the person in the provided photo. The face should be clear, bright, and exaggerated with bold, expressive features. It is mandatory to retain the original dressing and facial expression exactly as in the photo, without any alterations. High detailing is crucial to capture the essence and personality of the individual. The background should feature soft and playful watercolor splashes, maintaining a light and joyful tone. Avoid including any text elements or abstract designs to keep the focus entirely on the caricature."        }
+            "textPrompt": "Generate a vibrant artistic closeup shot by wearing their original outfit. The person is posed confidently with a friendly and approachable expression The face should be clear, bright, and exaggerated, with bold, expressive features of the input photo. The background features a dynamic, abstract swirl of purples, blues, and whites, resembling a watercolour or smoke-like effect. This gives the image a modern, creative feel. The overall style is a blend of digital art and realism, with a focus on bold colours and smooth textures. Ensure there are no text elements or abstract designs in the image. Use the dressing and facial expression same as in the original photo"}
 
         headers = {
             'x-api-key': API_KEY,
@@ -222,7 +222,7 @@ def upload_image():
         logging.error(f"Error: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+
 if __name__ == '__main__':
     logging.info("Starting Flask server")
     app.run(host='0.0.0.0', debug=True)
-
