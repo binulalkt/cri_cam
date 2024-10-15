@@ -495,9 +495,8 @@
         }
 
         function showQrCodeInNewWindow() {
-            const qrCodeWindow = window.open("", "QR Code");
-            qrCodeWindow.document.write("<div style='display: flex; justify-content: center; align-items: center; height: 100vh; margin-right: 0'><div id='qrCodeContainer'></div></div>");
-            new QRCode(qrCodeWindow.document.getElementById('qrCodeContainer'), {
+            const qrCodeWindow = window.open("", "QR Code", "width=800,height=800,top=" + (screen.height/2 - 400) + ",left=" + (screen.width/2 - 400));
+            qrCodeWindow.document.write("<div style='display: flex; justify-content: center; align-items: center; height: 100vh;'><div id='qrCodeContainer'></div></div>");            new QRCode(qrCodeWindow.document.getElementById('qrCodeContainer'), {
                 text: resultUrl,
                 width: 720,
                 height: 720,
