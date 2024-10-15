@@ -80,7 +80,7 @@ def generate_caricature():
         payload = {
             "imageUrl": image_url,
             "styleImageUrl": "https://i.ibb.co/0mRQ6fP/Coca-Cola-Caricature-Booth.jpg",
-            "textPrompt": "Generate a caricature of a person wearing traditional Indian attire. Focus on the face, exaggerating features for a humorous effect. Use vibrant, bold colors and smooth textures. Add a watercolor-inspired background with soft, swirling patterns in shades of purple, blue, and white. Ensure the overall tone is light and joyful."        }
+            "textPrompt": "funny cartoon caricature"        }
 
         headers = {
             'x-api-key': API_KEY,
