@@ -80,7 +80,7 @@ def generate_caricature():
         payload = {
             "imageUrl": image_url,
             "styleImageUrl": "https://i.ibb.co/0mRQ6fP/Coca-Cola-Caricature-Booth.jpg",
-            "textPrompt": "funny cartoon caricature"        }
+            "textPrompt": "Indian caricature"        }
 
         headers = {
             'x-api-key': API_KEY,
