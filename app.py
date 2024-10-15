@@ -16,7 +16,7 @@ CORS(app)
 UPLOAD_FOLDER = './uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-API_KEY = '45b2ff8a49234760b62933748acf5c6e_be53095060594c9c82bea37063875d7f_andoraitools'
+API_KEY = 'a030a6a75a6b449abb6ddf707f96804c_daa1ac4d5ed541d39ecbd66dffae1dda_andoraitools
 GENERATION_URL = 'https://api.lightxeditor.com/external/api/v1/caricature'
 STATUS_URL = 'https://api.lightxeditor.com/external/api/v1/order-status'
 
@@ -80,7 +80,7 @@ def generate_caricature():
         payload = {
             "imageUrl": image_url,
             "styleImageUrl": "https://i.ibb.co/0mRQ6fP/Coca-Cola-Caricature-Booth.jpg",
-            "textPrompt": "You are a perfect digital photo caricapture. Generate a vibrant watercolor caricapture of the person. The face should be clear, bright, and exaggerated, with bold, expressive features of input photo. Surround the caricature with soft and playful color splashes in the background, keeping the overall tone light and joyful.The background features a dynamic, abstract swirl of purples, blues, and whites, resembling a watercolour or smoke-like effect. This gives the image a modern, creative feel. The overall style is a blend of digital art and realism, with a focus on bold colours and smooth textures. Ensure there are no text elements or abstract designs in the image.  Ensure there are no text elements or abstract designs in the image. Use the dressing and face expression same as the original photo"
+            "textPrompt": "You are a perfect digital midshot caricature. Generate a vibrant watercolor caricapture of the person. The face should be clear, bright, and exaggerated, with bold, expressive features of input photo. Surround the caricature with soft and playful color splashes in the background, keeping the overall tone light and joyful.The background features a dynamic, abstract swirl of purples, blues, and whites, resembling a watercolour or smoke-like effect. This gives the image a modern, creative feel. The overall style is a blend of digital art and realism, with a focus on bold colours and smooth textures. Ensure there are no text elements or abstract designs in the image.  Ensure there are no text elements or abstract designs in the image. Use the dressing and face expression same as the original photo"
         }
 
         headers = {
