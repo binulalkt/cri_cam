@@ -238,6 +238,8 @@
         const newCaricatureButton = document.getElementById('newCaricature');
         const sideContainer = document.getElementById('side-container');
         let resultUrl = '';
+        newCaricatureButton.style.display = 'none';
+        generateButton.style.display = 'none';
         let isGeneratedOnce = false;
         // function showQrCodeInNewWindow() {}
         const constraints = {
@@ -291,8 +293,23 @@
                 capturedImageElement.classList.add('active');
                 overlay.style.display = 'none'; // Hide overlay
 
-                generateButton.disabled = false;
-                captureButton.textContent = 'Recapture';
+                generateButton.style.display = 'flex';
+                generateButton.style.backgroundColor = 'rgba(40, 167, 69, 0.5)';
+                generateButton.style.color = '#fff';
+                generateButton.style.border = 'none';
+                generateButton.style.borderRadius = '10px';
+                generateButton.style.padding = '10px 20px';
+                generateButton.style.cursor = 'pointer';
+                generateButton.style.height = '80px';
+                generateButton.style.width = '260px';
+                generateButton.style.position = 'fixed';
+                generateButton.style.bottom = '0';
+                generateButton.style.boxShadow = '0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)';
+                generateButton.style.transition = 'all 0.3s ease-in-out';
+                generateButton.disabled = true;
+                captureButton.style.position = 'flex';
+                captureButton.style.transform = 'translate(45%, -30%)';
+                captureButton.textContent = 'X';
             });
         });
 
@@ -496,7 +513,8 @@
 
         function showQrCodeInNewWindow() {
             const qrCodeWindow = window.open("", "QR Code", "width=800,height=800,top=" + (screen.height/2 - 400) + ",left=" + (screen.width/2 - 400));
-            qrCodeWindow.document.write("<div style='display: flex; justify-content: center; align-items: center; height: 100vh;'><div id='qrCodeContainer'></div></div>");            new QRCode(qrCodeWindow.document.getElementById('qrCodeContainer'), {
+            qrCodeWindow.document.write("<div style='display: flex; justify-content: center; align-items: center; height: 100vh;'><div id='qrCodeContainer'></div></div>");
+            new QRCode(qrCodeWindow.document.getElementById('qrCodeContainer'), {
                 text: resultUrl,
                 width: 720,
                 height: 720,
@@ -508,6 +526,7 @@
                     zIndex: '199'
                 }
             });
+            document.addEventListener('click', () => qrCodeContainer.style.display = 'none');
         }
 
 
