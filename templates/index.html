@@ -490,24 +490,28 @@
             document.getElementById('showQrCode').addEventListener('click', () => {
                 qrCodeContainer.style.display = 'flex';  // Show overlay
                 showQrCodeInNewWindow();
-                console.log(`Result URL: ${resultUrl}`);
-                function showQrCodeInNewWindow() {
-                    const qrCodeWindow = window.open("", "QR Code");
-                    qrCodeWindow.document.write("<div style='display: flex; justify-content: center; align-items: center; height: 100vh; margin-right: 0'><div id='qrCodeContainer'></div></div>");
-                    new QRCode(qrCodeWindow.document.getElementById('qrCodeContainer'), {
-                        text: resultUrl,
-                        width: 720,
-                        height: 720,
-                        style: {
-                            position: 'absolute',
-                            left: '50%',
-                            top: '50%',
-                            transform: 'translate(-50%, -50%)'
-                        }
-                    });
-                }
+                console.log(` URL: ${resultUrl}`);
             });    // Call this after generating the QR code
         }
+
+        function showQrCodeInNewWindow() {
+            const qrCodeWindow = window.open("", "QR Code");
+            qrCodeWindow.document.write("<div style='display: flex; justify-content: center; align-items: center; height: 100vh; margin-right: 0'><div id='qrCodeContainer'></div></div>");
+            new QRCode(qrCodeWindow.document.getElementById('qrCodeContainer'), {
+                text: resultUrl,
+                width: 720,
+                height: 720,
+                style: {
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: '199'
+                }
+            });
+        }
+
+
         // Hide overlay when clicked anywhere on the screen
         document.addEventListener('click', () => qrCodeContainer.style.display = 'none');
 
