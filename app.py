@@ -80,7 +80,7 @@ def generate_caricature():
         payload = {
             "imageUrl": image_url,
             "styleImageUrl": "https://i.ibb.co/GV3P1T1/Whats-App-Image-2024-10-14-at-13-17-53.jpg",
-            "textPrompt": "Generate a vibrant artistic closeup shot by wearing their original outfit. The person is posed confidently with a friendly and approachable expression The face should be clear, bright, and exaggerated, with bold, expressive features of the input photo. The background features a dynamic, abstract swirl of purples, blues, and whites, resembling a watercolour or smoke-like effect. This gives the image a modern, creative feel. The overall style is a blend of digital art and realism, with a focus on bold colours and smooth textures. Ensure there are no text elements or abstract designs in the image. Use the dressing and facial expression same as in the original photo"}
+            "textPrompt": "Generate a caricature of a person wearing traditional Indian attire. Focus on the face, exaggerating features for a humorous effect. Use vibrant, bold colors and smooth textures. Add a watercolor-inspired background with soft, swirling patterns in shades of purple, blue, and white. Ensure the overall tone is light and joyful."}
 
         headers = {
             'x-api-key': API_KEY,
