@@ -16,7 +16,7 @@ CORS(app)
 UPLOAD_FOLDER = './uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-API_KEY = 'a030a6a75a6b449abb6ddf707f96804c_daa1ac4d5ed541d39ecbd66dffae1dda_andoraitools'
+API_KEY = '45b2ff8a49234760b62933748acf5c6e_be53095060594c9c82bea37063875d7f_andoraitools'
 GENERATION_URL = 'https://api.lightxeditor.com/external/api/v1/caricature'
 STATUS_URL = 'https://api.lightxeditor.com/external/api/v1/order-status'
 
