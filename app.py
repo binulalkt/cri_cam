@@ -17,7 +17,7 @@ UPLOAD_FOLDER = './uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 API_KEY = 'a030a6a75a6b449abb6ddf707f96804c_daa1ac4d5ed541d39ecbd66dffae1dda_andoraitools'
-GENERATION_URL = 'https://api.lightxeditor.com/external/api/v1/caricature'
+GENERATION_URL = 'https://api.lightxeditor.com/external/api/v1/portrait'
 STATUS_URL = 'https://api.lightxeditor.com/external/api/v1/order-status'
 
 # Ensure the upload directory exists
@@ -80,7 +80,7 @@ def generate_caricature():
         payload = {
             "imageUrl": image_url,
             "styleImageUrl":  image_url,
-            "textPrompt": "Using style image as background, create exact caricature"}
+            "textPrompt": "Using style image as background, create exact coloured line drawing"}
 
         headers = {
             'x-api-key': API_KEY,
