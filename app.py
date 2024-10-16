@@ -79,7 +79,7 @@ def generate_caricature():
 
         payload = {
             "imageUrl": image_url,
-            "styleImageUrl": "https://i.ibb.co/qjQvJ4t/freepik-edit.png",
+            "styleImageUrl":  image_url,
             "textPrompt": "Using style image as background, create exact caricature"}
 
         headers = {
