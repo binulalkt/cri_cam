@@ -79,7 +79,7 @@ def generate_caricature():
 
         payload = {
             "imageUrl": image_url,
-            "styleImageUrl":  image_url,
+            "styleImageUrl":  'https://ibb.co/Jp8HtRh',
             "textPrompt": "Using style image as background, create exact coloured line drawing"}
 
         headers = {
