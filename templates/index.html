@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" style="height: 100%">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +11,6 @@
             margin: 0;
             padding: 0;
             background-image: url('static/bg3.jpg');
-            /* Add your background image URL */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -29,7 +27,6 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            /* Added for positioning the overlay */
         }
 
         h1 {
@@ -38,15 +35,12 @@
             margin-bottom: 20px;
         }
 
-
-
         .main-display {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
             height: auto;
-            /* Fixed height */
             margin-bottom: 20px;
             position: relative;
             background-color: #ffffff00;
@@ -71,7 +65,6 @@
             top: 0;
             left: 0;
             display: none;
-            /* Initially hidden */
         }
 
         #status {
@@ -82,15 +75,16 @@
         #capturedImage,
         #generatedCaricature,
         video {
-                       width: 540px;
+            width: 540px;
             height: 960px;
             object-fit: contain;
             display: none;
             background-color: #ffffff3e;
         }
-               #capturedImage,
+
+        #capturedImage,
         video {
-         transform: rotate(90deg);
+            transform: rotate(90deg);
         }
 
         #capturedImage.active,
@@ -114,7 +108,6 @@
             display: none;
         }
 
-        /* Overlay styles */
         #overlay {
             position: fixed;
             top: 0;
@@ -123,11 +116,9 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             display: none;
-            /* Initially hidden */
             justify-content: center;
             align-items: center;
             z-index: 999;
-            /* Make sure it's on top */
         }
 
         .countdown {
@@ -148,25 +139,13 @@
 </head>
 
 <body>
-    <!-- <style>
-        .container {
-            display: none;
-        }
-    </style>
-
-    <script>
-        document.addEventListener('mousemove', function () {
-            document.querySelector('.container').style.display = 'block';
-        });
-    </script> -->
-
     <img src="static/chairman.png"
         style="width:auto; height: 15%; display: block; margin: 0 auto;" alt="Caricature Photo Maker Online">
     <div class="container">
         <input type="hidden" id="styleImageUrl" value="1" />
         <div class="main-display" style="padding-top: 15%; border: 1px solid #ccc; border-radius: 16px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);">
             <div class="side-container" id="side-container">
-                <div id="qrcode"></div> <!-- QR code will be placed here -->
+                <div id="qrcode"></div>
             </div>
             <video id="webcam" autoplay playsinline class="active"
                 style="width: 720px; height: 640px; border: none; background: rgba(240, 240, 240, 0.1); border-radius: 16px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);"></video>
@@ -190,16 +169,20 @@
                 </div>
             </div>
         </div>
-
         <canvas id="canvas" width="700" height="600"></canvas>
-
         <div
             style="position: absolute; top: -12%; left: 2%; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; gap: 0px;">
             <button id="capture"
                 style="width: 21.5%; height: 80%; font-family: 'Comic Sans MS', 'Comic Sans', cursive; font-size: 1.5em; color: rgba(255, 255, 255, 0); background-color: #ffffff00; border: none; border-radius: 4px; padding: 10px 20px; cursor: pointer; transition: all 0.3s ease-in-out;">
                 C
             </button>
-            <button id="generate"
+            <div id="gender" style="display: none; justify-content: center; align-items: center; gap: 10px;">
+                <input type="radio" id="male" name="gender" value="male" checked>
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="female">
+                <label for="female">Female</label>
+            </div>        
+                <button id="generate"
                 style="width: 21.5%; height: 80%; font-family: 'Comic Sans MS', 'Comic Sans', cursive; font-size: 1.5em; color: rgba(255, 255, 255, 0.7); background-color: #ffffff00; border: none; border-radius: 4px; padding: 10px 20px; cursor: pointer; transition: all 0.3s ease-in-out; z-index: 3;"
                 disabled>Generate Caricature</button>
             <button id="newCaricature" class="hidden"
@@ -210,12 +193,11 @@
 
         <div id="loading" style="display: none;">
             <p>Generating caricature... please wait</p>
-            <!-- <img src="/static/loading.gif" alt="Loading" style="width: 50px; height: 50px;"> -->
         </div>
 
         <p id="status" style="display: none;"></p>
 
-        <!-- Overlay for loading animation -->
+        
         <div id="overlay">
             <div>
                 <p class="countdown" id="countdownDisplay">5</p>
@@ -223,7 +205,125 @@
             </div>
         </div>
     </div>
+    <section class="templates" style="display: none;" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2));
+    border-radius: 20px; box-shadow: 0 4px 10px rgba(255, 255, 255, 0.4);">
+   <h1 style="text-align: center; font-size: 2em;">Select a Model</h1>
 
+   <div style="font-size: 1.8em; padding: 10px;">
+       <label for="toggle-gender" style="margin-right: 10px; padding: 5px;">Gender:</label>
+       <label for="toggle-gender" style="margin-right: 10px; padding: 5px;">Male</label>
+
+       <button id="toggle-gender" style="
+position: relative;
+width: 80px;
+height: 40px;
+background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2));
+border-radius: 20px;
+box-shadow: 0 4px 10px rgba(237, 14, 14, 0.818); /* Red box-shadow for better visibility */
+border: none;
+cursor: pointer;
+background: linear-gradient(135deg, rgba(237, 14, 14, 0.818), rgba(237, 14, 14, 0.4)); /* Red gradient as background */
+">
+           <span id="toggle-gender-icon" style="
+   position: absolute;
+   top: 50%;
+   left: 60%; /* Start in the checked position */
+   width: 30px;
+   height: 30px;
+   background: white;
+   border-radius: 50%;
+   transform: translate(0, -50%);
+   transition: left 0.3s ease;
+"></span>
+       </button>
+       <label for="toggle-gender" style="margin-left: 10px;">Female</label>
+   </div>
+
+   <!-- Male images -->
+   <div id="male-images" style="display: none; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+       <button id="male-img-1" class="image-btn" style="
+width: 300px;
+height: 300px;
+background: url('static/male.jpeg');
+background-size: cover;
+border: none;
+margin: 5px;
+transition: opacity 0.5s ease; /* Fade effect */
+"></button>
+       <button id="male-img-2" class="image-btn" style="
+width: 300px;
+height: 300px;
+background: url('static/male.jpeg');
+background-size: cover;
+border: none;
+margin: 5px;
+transition: opacity 0.5s ease; /* Fade effect */
+"></button>
+       <button id="male-img-3" class="image-btn" style="
+width: 300px;
+height: 300px;
+background: url('static/male.jpeg');
+background-size: cover;
+border: none;
+margin: 5px;
+transition: opacity 0.5s ease; /* Fade effect */
+"></button>
+       <button id="male-img-4" class="image-btn" style="
+width: 300px;
+height: 300px;
+background: url('static/male.jpeg');
+background-size: cover;
+border: none;
+margin: 5px;
+transition: opacity 0.5s ease; /* Fade effect */
+"></button>
+       <!-- More male images -->
+   </div>
+
+   <!-- Female images -->
+   <div id="female-images" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+       <button id="female-img-1" class="image-btn" style="
+width: 300px;
+height: 300px;
+background: url('static/festatic/male.jpeg');
+background-size: cover;
+border: none;
+margin: 5px;
+transition: opacity 0.5s ease; /* Fade effect */
+"></button>
+       <button id="female-img-2" class="image-btn" style="
+width: 300px;
+height: 300px;
+background: url('static/festatic/male.jpeg');
+background-size: cover;
+border: none;
+margin: 5px;
+transition: opacity 0.5s ease; /* Fade effect */
+"></button>
+       <button id="female-img-3" class="image-btn" style="
+width: 300px;
+height: 300px;
+background: url('static/festatic/male.jpeg');
+background-size: cover;
+border: none;
+margin: 5px;
+transition: opacity 0.5s ease; /* Fade effect */
+"></button>
+       <button id="female-img-4" class="image-btn" style="
+width: 300px;
+height: 300px;
+background: url('static/festatic/male.jpeg');
+background-size: cover;
+border: none;
+margin: 5px;
+transition: opacity 0.5s ease; /* Fade effect */
+"></button>
+   </div>
+   </div>
+
+
+   </div>
+</section>
     <script>
         const webcamElement = document.getElementById('webcam');
         const canvasElement = document.getElementById('canvas');
@@ -239,12 +339,12 @@
         const countdownDisplay = document.getElementById('countdownDisplay');
         const newCaricatureButton = document.getElementById('newCaricature');
         const sideContainer = document.getElementById('side-container');
+        const genderElement = document.getElementById('gender');
         let resultUrl = '';
         newCaricatureButton.style.display = 'none';
         generateButton.style.display = 'none';
         let isGeneratedOnce = false;
         let change_button=false;
-        // function showQrCodeInNewWindow() {}
         const constraints = {
             video: true
         };
@@ -285,8 +385,6 @@
                 console.error('Capture button pressed');
                 loadingElement.firstChild.src = 'static/loading.gif';
             }, 2000);
-            
-            // overlay.style.display = 'flex'; // Show overlay
             console.error('Capture button pressed');
             capturedImageElement.classList.remove('active');
             webcamElement.classList.add('active');
@@ -298,7 +396,7 @@
 
                 webcamElement.classList.remove('active');
                 capturedImageElement.classList.add('active');
-                overlay.style.display = 'none'; // Hide overlay
+                overlay.style.display = 'none'; 
 
                 generateButton.style.display = 'flex';
                 generateButton.style.backgroundColor = 'rgba(40, 167, 69, 0.5)';
@@ -314,6 +412,21 @@
                 generateButton.style.boxShadow = '0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)';
                 generateButton.style.transition = 'all 0.3s ease-in-out';
                 generateButton.disabled = false;
+
+                genderElement.style.display = 'flex';
+                genderElement.style.backgroundColor = 'rgba(40, 167, 69, 0.5)';
+                genderElement.style.color = '#fff';
+                genderElement.style.border = 'none';
+                genderElement.style.borderRadius = '10px';
+                genderElement.style.padding = '10px 20px';
+                genderElement.style.cursor = 'pointer';
+                genderElement.style.height = '80px';
+                genderElement.style.width = '260px';
+                genderElement.style.position = 'fixed';
+                genderElement.style.bottom = '70px';
+                genderElement.style.boxShadow = '0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)';
+                genderElement.style.transition = 'all 0.3s ease-in-out';
+
                 captureButton.style.position = 'flex';
                 captureButton.style.transform = 'translate(80%, -31%)';
                 captureButton.style.zIndex = '11';
@@ -338,6 +451,7 @@
         generateButton.addEventListener('click', () => {
             if (isGeneratedOnce) return;
             isGeneratedOnce = true;
+
             console.log('generate button pressed');
             const imageDataURL = capturedImageElement.src;
 
@@ -345,19 +459,18 @@
                 statusElement.textContent = 'Please capture an image first!';
                 return;
             }
-
+            
             const blob = dataURLToBlob(imageDataURL);
 
             const formData = new FormData();
             formData.append('imageFile', blob, 'captured_image.jpg');
-
+            formData.append('gender', genderElement.textContent);
             countdownDisplay.style.display = 'none';
-            loadingElement.style.display = 'block'; // Show loading animation
-            generateButton.classList.add('hidden'); // Hide generate button
-            captureButton.classList.add('hidden'); // Hide capture button too
+            loadingElement.style.display = 'block'; 
+            generateButton.classList.add('hidden');
+            captureButton.classList.add('hidden');
 
-            overlay.style.display = 'flex'; // Show overlay
-
+            overlay.style.display = 'flex'; 
             fetch('/upload_image', {
                 method: 'POST',
                 body: formData
@@ -373,22 +486,22 @@
                         
                     } else {
                         statusElement.textContent = `Error: ${data.message}. Contact Photobooth authority.`;
-                        loadingElement.style.display = 'none'; // Hide loading animation
-                        overlay.style.display = 'none'; // Hide overlay
-                        generateButton.style.display = 'none'; // Hide generate button
+                        loadingElement.style.display = 'none';
+                        overlay.style.display = 'none'; 
+                        generateButton.style.display = 'none'; 
                     }
                 })
                 .catch(err => {
                     statusElement.textContent = `Error: ${err}. Contact Photobooth authority.`;
-                    loadingElement.style.display = 'none'; // Hide loading animation
-                    overlay.style.display = 'none'; // Hide overlay
+                    loadingElement.style.display = 'none'; 
+                    overlay.style.display = 'none';
                 });
         });
 
         function generateCaricature(imageUrl) {
             const formData = new FormData();
             formData.append('imageUrl', imageUrl);
-            formData.append('styleImageUrl', '1');
+            formData.append('styleImageUrl', template);
 
             fetch('/generate_caricature', {
                 method: 'POST',
@@ -401,14 +514,14 @@
                         startPolling(data.orderId);
                     } else {
                         statusElement.textContent = `Error: ${data.message}. Contact Photobooth authority.`;
-                        loadingElement.style.display = 'none'; // Hide loading animation
-                        overlay.style.display = 'none'; // Hide overlay
+                        loadingElement.style.display = 'none'; 
+                        overlay.style.display = 'none'; 
                     }
                 })
                 .catch(err => {
                     statusElement.textContent = `Error: ${err}. Contact Photobooth authority.`;
-                    loadingElement.style.display = 'none'; // Hide loading animation
-                    overlay.style.display = 'none'; // Hide overlay
+                    loadingElement.style.display = 'none';
+                    overlay.style.display = 'none';
                 });
         }
 
@@ -423,16 +536,16 @@
                         resultUrl = statusData.output;
                         statusElement.textContent = 'Caricature ready!';
 
-                        // Hide captured image and show generated caricature
+                        
                         capturedImageElement.classList.remove('active');
-                        // Set the src attribute of the generated caricature element to the result URL
+                        
                         const generatedCaricatureImg = document.getElementById('generatedCaricature');
                         generatedCaricatureImg.src = resultUrl;
-                        // Show the generated caricature element
+                        
                         generatedCaricatureElement.classList.add('active');
                         loadingElement.style.display = 'none';
                         qrCodeContainer.innerHTML = '';
-                        qrCodeContainer.style.display = 'none';  // Show QR code
+                        qrCodeContainer.style.display = 'none'; 
                         new QRCode(qrCodeContainer, {
                             text: resultUrl,
                             width: 720,
@@ -445,63 +558,45 @@
                             }
                         });
                         console.log(`Result URL: ${resultUrl}`);
-
-                        // setupQrCode(resultUrl); 
                         document.getElementById('showQrCode').classList.remove('hidden');
                         document.getElementById('printCaricature').classList.remove('hidden');
-                        newCaricatureButton.classList.remove('hidden'); // Show New Caricature button
-                        // Pass resultUrl from within the context where it's defined
-                        // Show buttons after QR code is generated
-                        sideImgLeft.style.display = 'none';  // Hide left side image
-                        // Auto-download caricature image
+                        newCaricatureButton.classList.remove('hidden');
+                        sideImgLeft.style.display = 'none';  
+                       
                         fetch(resultUrl)
                             .then(response => response.blob())
                             .then(blob => {
-                                // Create an URL pointing to the blob, which allows the browser to download it
-                                // This is necessary because the blob is not a file on the server, but rather a
-                                // temporary object in memory that can be accessed via this URL
-                                // Create an URL pointing to the blob, which allows the browser to download it
-                                // This is necessary because the blob is not a file on the server, but rather a
-                                // temporary object in memory that can be accessed via this URL
                                 const url = window.URL.createObjectURL(blob);
-                                // Create an anchor element to download the blob
                                 const link = document.createElement('a');
                                 link.href = url;
-                                // Set the download attribute to the filename and extension
                                 link.download = `cartoons/caricature_${orderId}.jpg`;
-                                // Simulate a click event on the anchor element to download the blob
                                 link.click();
-                                // Revoke the URL to free up memory
                                 window.URL.revokeObjectURL(url);
-                                console.log(`Result URL: ${resultUrl}`);
-                                // Create an image element to display the downloaded image
                                 const image = document.createElement('img');
                                 image.src = url;
                                 image.alt = `Generated Caricature for order ID ${orderId}`;
-                                // Empty the generated caricature container and append the image element
                                 generatedCaricatureElement.innerHTML = '';
                                 generatedCaricatureElement.appendChild(image);
                             });
-                        loadingElement.style.display = 'none'; // Hide loading animation
-                        overlay.style.display = 'none'; // Hide overlay
+                        loadingElement.style.display = 'none'; 
+                        overlay.style.display = 'none'; 
 
-
-                        // Function to print the generated caricature
+                        
                         function printGeneratedCaricature() {
                             const generatedCaricatureImg = document.getElementById('generatedCaricature');
-                            const bodyContent = document.body.innerHTML;  // Store original page content
-                            // Prepare the page to show only the image for printing
+                            const bodyContent = document.body.innerHTML; 
+                            
                             document.body.innerHTML = `<img src="${generatedCaricatureImg.src}" style="width:100%; height:auto;">`;
 
-                            window.print();  // Print the image
+                            window.print(); 
 
-                            // Restore the original page content after printing
+                            
                             document.body.innerHTML = bodyContent;
                         }
-                        // Add event listener to the print button
+                        
                         document.getElementById('printCaricature').addEventListener('click', printGeneratedCaricature);
 
-                        // Auto refresh after 30 seconds
+                        
                         setTimeout(() => {
                             location.reload();
                         }, 50000);
@@ -510,17 +605,17 @@
                     }
                 })
                 .catch(err => {
-                    // clearInterval(pollingInterval);
+                   
                     statusElement.textContent = `Error: ${err}. Contact Photobooth authority.`;
-                    loadingElement.style.display = 'none'; // Hide loading animation
-                    overlay.style.display = 'none'; // Hide overlay
+                    loadingElement.style.display = 'none'; 
+                    overlay.style.display = 'none'; 
                 });
 
             document.getElementById('showQrCode').addEventListener('click', () => {
-                qrCodeContainer.style.display = 'flex';  // Show overlay
+                qrCodeContainer.style.display = 'flex'; 
                 showQrCodeInNewWindow();
                 console.log(` URL: ${resultUrl}`);
-            });    // Call this after generating the QR code
+            }); 
         }
 
         function showQrCodeInNewWindow() {
@@ -542,21 +637,19 @@
         }
 
 
-        // Hide overlay when clicked anywhere on the screen
+       
         document.addEventListener('click', () => qrCodeContainer.style.display = 'none');
 
         document.getElementById('printCaricature').addEventListener('click', () => {
             const generatedCaricatureImg = document.getElementById('generatedCaricature');
-            const bodyContent = document.body.innerHTML;  // Store original page content
+            const bodyContent = document.body.innerHTML;  
 
-            // Prepare the page to show only the image for printing
+          
             document.body.innerHTML = `<img src="${generatedCaricatureImg.src}" style="width:100%; height:auto;">`;
 
-            window.print();  // Print the image
+            window.print();  
 
-            // Restore the original page content after printing
-            // Restore the original page content after printing
-            // This is required because the print method will not work if the page content is not restored
+           
             document.body.innerHTML = bodyContent;
 
         });
@@ -566,7 +659,7 @@
         generateButton.addEventListener('click', () => {
 
             if (change_button) { 
-                location.reload(); // Refresh the page
+                location.reload(); 
                 change_button=false;
             }
         });
