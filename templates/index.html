@@ -384,8 +384,6 @@
         function generateCaricature(imageUrl) {
             const formData = new FormData();
             formData.append('imageUrl', imageUrl);
-            formData.append('styleImageUrl', template);
-
             fetch('/generate_caricature', {
                 method: 'POST',
                 body: formData
