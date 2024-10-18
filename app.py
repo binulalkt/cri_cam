@@ -69,12 +69,17 @@ def upload_pillow_image_to_freeimagehost(image):
 def generate_caricature():
     try:
         image_url = request.form.get('imageUrl')
+        gender = request.form.get('gender')
         logging.info(
-            f"Received request to generate caricature with imageUrl: {image_url}")
+            f"Received request to generate caricature with imageUrl: {image_url} and gender: {gender}")
 
         if not image_url:
             logging.error("No image URL provided")
             return jsonify({'status': 'error', 'message': 'No image URL provided'}), 400
+
+        if not gender:
+            logging.error("No gender data found in request")
+            return jsonify({'status': 'error', 'message': 'No gender data'}), 400
 
         payload = {
             "imageUrl": image_url,
