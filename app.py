@@ -8,19 +8,18 @@ from PIL import Image
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
-# Set up logging to print to the terminal
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
 CORS(app)
 UPLOAD_FOLDER = './uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+gender='male'
 API_KEY = 'a030a6a75a6b449abb6ddf707f96804c_daa1ac4d5ed541d39ecbd66dffae1dda_andoraitools'
 GENERATION_URL = 'https://api.lightxeditor.com/external/api/v1/portrait'
 STATUS_URL = 'https://api.lightxeditor.com/external/api/v1/order-status'
 
-# Ensure the upload directory exists
+
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
@@ -45,7 +44,7 @@ def add_template(generated_image_url):
 def upload_pillow_image_to_freeimagehost(image):
     url = "https://freeimage.host/api/1/upload"
     payload = {
-        "key": "6d207e02198a847aa98d0a2a901485a5",  # ADD YOUR API KEY HERE
+        "key": "6d207e02198a847aa98d0a2a901485a5",  
         "action": "upload"
     }
 
@@ -79,8 +78,8 @@ def generate_caricature():
 
         payload = {
             "imageUrl": image_url,
-            "styleImageUrl":  'https://ibb.co/Jp8HtRh',
-            "textPrompt": "Using style image as background, create exact coloured line drawing"}
+            "styleImageUrl": gender == 'male' and "https://i.ibb.co/hWnHWbF/Whats-App-Image-2024-10-17-at-8-30-17-PM.jpg" or "https://i.ibb.co/Jq6m3HL/Whats-App-Image-2024-10-17-at-8-29-58-PM.jpg",
+    "textPrompt":gender == 'male' and "portrait of a man, background is white, and the man is surrounded by a colorful smoke-like effect in shades of blue, purple, and pink. The smoke appears to be swirling around the man's face, creating a sense of movement and energy" or "painting of a woman, vibrant and colorful, with a variety of hues and shades" }
 
         headers = {
             'x-api-key': API_KEY,
@@ -138,29 +137,25 @@ def check_status(order_id):
                 f"Sending POST request to check status for orderId: {order_id} (Retry {retries + 1}/{max_retries})")
 
             response = requests.post(url, headers=headers, json=payload)
-            # print(response.status_code)
-            # logging.info(f"API Response Status Code: {response.status_code}")
-            # logging.debug(f"API Response Text: {response.text}")
-
+           
             if response.status_code == 200:
                 response_json = response.json()
                 print(response_json)
                 body_data = response_json.get('body')
                 status = body_data.get('status')
 
-                # logging.info(f"Status received: {status}")
-
+               
                 if status == 'active':
-                    # logging.info(f"Order {order_id} is active. Returning output.")
+                  
                     image_url = body_data.get('output')
                     template_image = add_template(image_url)
                     image_url = upload_pillow_image_to_freeimagehost(template_image)
                     return jsonify({'status': 'active', 'output': image_url})
                 elif status == 'failed':
-                    # logging.error(f"Order {order_id} failed.")
+                   
                     return jsonify({'status': 'failed', 'message': 'Order processing failed.'}), 400
 
-                # logging.info(f"Status is {status}. Retrying in {retry_interval} seconds...")
+               
                 time.sleep(retry_interval)
                 retries += 1
             else:
@@ -190,9 +185,14 @@ def upload_image():
             logging.error("No selected image file")
             return jsonify({'status': 'error', 'message': 'No selected image file'}), 400
 
-        # Use ImgBB API to upload the image
+        gender = request.form.get('gender')
+        if not gender:
+            logging.error("No gender data found in request")
+            return jsonify({'status': 'error', 'message': 'No gender data'}), 400
+
+        
         api_url = 'https://api.imgbb.com/1/upload'
-        api_key = '4271c9081a75f3f81b7cbc8d39163a3b'  # Your ImgBB API key
+        api_key = '4271c9081a75f3f81b7cbc8d39163a3b'  
 
         files = {
             'image': image_file,
@@ -226,3 +226,4 @@ def upload_image():
 if __name__ == '__main__':
     logging.info("Starting Flask server")
     app.run(host='0.0.0.0', debug=True)
+a
