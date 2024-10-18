@@ -205,125 +205,7 @@
             </div>
         </div>
     </div>
-    <section class="templates" style="display: none;" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2));
-    border-radius: 20px; box-shadow: 0 4px 10px rgba(255, 255, 255, 0.4);">
-   <h1 style="text-align: center; font-size: 2em;">Select a Model</h1>
 
-   <div style="font-size: 1.8em; padding: 10px;">
-       <label for="toggle-gender" style="margin-right: 10px; padding: 5px;">Gender:</label>
-       <label for="toggle-gender" style="margin-right: 10px; padding: 5px;">Male</label>
-
-       <button id="toggle-gender" style="
-position: relative;
-width: 80px;
-height: 40px;
-background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2));
-border-radius: 20px;
-box-shadow: 0 4px 10px rgba(237, 14, 14, 0.818); /* Red box-shadow for better visibility */
-border: none;
-cursor: pointer;
-background: linear-gradient(135deg, rgba(237, 14, 14, 0.818), rgba(237, 14, 14, 0.4)); /* Red gradient as background */
-">
-           <span id="toggle-gender-icon" style="
-   position: absolute;
-   top: 50%;
-   left: 60%; /* Start in the checked position */
-   width: 30px;
-   height: 30px;
-   background: white;
-   border-radius: 50%;
-   transform: translate(0, -50%);
-   transition: left 0.3s ease;
-"></span>
-       </button>
-       <label for="toggle-gender" style="margin-left: 10px;">Female</label>
-   </div>
-
-   <!-- Male images -->
-   <div id="male-images" style="display: none; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-       <button id="male-img-1" class="image-btn" style="
-width: 300px;
-height: 300px;
-background: url('static/male.jpeg');
-background-size: cover;
-border: none;
-margin: 5px;
-transition: opacity 0.5s ease; /* Fade effect */
-"></button>
-       <button id="male-img-2" class="image-btn" style="
-width: 300px;
-height: 300px;
-background: url('static/male.jpeg');
-background-size: cover;
-border: none;
-margin: 5px;
-transition: opacity 0.5s ease; /* Fade effect */
-"></button>
-       <button id="male-img-3" class="image-btn" style="
-width: 300px;
-height: 300px;
-background: url('static/male.jpeg');
-background-size: cover;
-border: none;
-margin: 5px;
-transition: opacity 0.5s ease; /* Fade effect */
-"></button>
-       <button id="male-img-4" class="image-btn" style="
-width: 300px;
-height: 300px;
-background: url('static/male.jpeg');
-background-size: cover;
-border: none;
-margin: 5px;
-transition: opacity 0.5s ease; /* Fade effect */
-"></button>
-       <!-- More male images -->
-   </div>
-
-   <!-- Female images -->
-   <div id="female-images" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-       <button id="female-img-1" class="image-btn" style="
-width: 300px;
-height: 300px;
-background: url('static/festatic/male.jpeg');
-background-size: cover;
-border: none;
-margin: 5px;
-transition: opacity 0.5s ease; /* Fade effect */
-"></button>
-       <button id="female-img-2" class="image-btn" style="
-width: 300px;
-height: 300px;
-background: url('static/festatic/male.jpeg');
-background-size: cover;
-border: none;
-margin: 5px;
-transition: opacity 0.5s ease; /* Fade effect */
-"></button>
-       <button id="female-img-3" class="image-btn" style="
-width: 300px;
-height: 300px;
-background: url('static/festatic/male.jpeg');
-background-size: cover;
-border: none;
-margin: 5px;
-transition: opacity 0.5s ease; /* Fade effect */
-"></button>
-       <button id="female-img-4" class="image-btn" style="
-width: 300px;
-height: 300px;
-background: url('static/festatic/male.jpeg');
-background-size: cover;
-border: none;
-margin: 5px;
-transition: opacity 0.5s ease; /* Fade effect */
-"></button>
-   </div>
-   </div>
-
-
-   </div>
-</section>
     <script>
         const webcamElement = document.getElementById('webcam');
         const canvasElement = document.getElementById('canvas');
@@ -385,6 +267,8 @@ transition: opacity 0.5s ease; /* Fade effect */
                 console.error('Capture button pressed');
                 loadingElement.firstChild.src = 'static/loading.gif';
             }, 2000);
+            
+            
             console.error('Capture button pressed');
             capturedImageElement.classList.remove('active');
             webcamElement.classList.add('active');
@@ -451,7 +335,6 @@ transition: opacity 0.5s ease; /* Fade effect */
         generateButton.addEventListener('click', () => {
             if (isGeneratedOnce) return;
             isGeneratedOnce = true;
-
             console.log('generate button pressed');
             const imageDataURL = capturedImageElement.src;
 
@@ -459,7 +342,7 @@ transition: opacity 0.5s ease; /* Fade effect */
                 statusElement.textContent = 'Please capture an image first!';
                 return;
             }
-            
+
             const blob = dataURLToBlob(imageDataURL);
 
             const formData = new FormData();
@@ -668,3 +551,4 @@ transition: opacity 0.5s ease; /* Fade effect */
 </body>
 
 </html>
+
