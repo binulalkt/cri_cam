@@ -77,9 +77,7 @@ def generate_caricature():
             logging.error("No image URL provided")
             return jsonify({'status': 'error', 'message': 'No image URL provided'}), 400
 
-        if not gender:
-            logging.error("No gender data found in request")
-            return jsonify({'status': 'error', 'message': 'No gender data'}), 400
+       
 
         payload = {
             "imageUrl": image_url,
